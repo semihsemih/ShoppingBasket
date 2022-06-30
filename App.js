@@ -1,19 +1,34 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
 
 import ProductInput from "./components/ProductInput";
 import ProductItem from "./components/ProductItem";
 
 export default function App() {
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const [basket, setBasket] = useState([]);
 
   function addProductHandler(enteredProductText) {
     setBasket((currentBasket) => [...currentBasket, enteredProductText]);
+    endAddProduct();
+  }
+
+  function startAddProduct() {
+    setModalIsVisible(true);
+  }
+
+  function endAddProduct() {
+    setModalIsVisible(false);
   }
 
   return (
     <View style={styles.appContainer}>
-      <ProductInput onAdd={addProductHandler} />
+      <Button title="Add New Goal" onPress={startAddProduct} />
+      <ProductInput
+        visible={modalIsVisible}
+        onAdd={addProductHandler}
+        onCancel={endAddProduct}
+      />
       <View>
         <FlatList
           data={basket}
