@@ -1,16 +1,49 @@
 import { useState } from "react";
 import { View, TextInput, Button, StyleSheet, Modal } from "react-native";
 
-function ProductInput(props) {
-  const [enteredProductText, setEnteredProductText] = useState("");
+import Dropdown from "./Dropdown";
 
-  function prodcutInputHandler(enteredText) {
-    setEnteredProductText(enteredText);
+function ProductInput(props) {
+  const [productName, setProductName] = useState("");
+  const [productQuantity, setProductQuantity] = useState(1);
+  const [productMeasure, setProductMeasure] = useState(null);
+  const [productLocation, setProductLocation] = useState("");
+
+  let units = [
+    { id: 1, name: "kg" },
+    { id: 2, name: "piece" },
+    { id: 3, name: "liter" },
+    { id: 3, name: "meter" },
+  ];
+
+  function prodcutNameInputHandler(name) {
+    setProductName(name);
+  }
+
+  function prodcutQuantityInputHandler(enteredNumber) {
+    setProductQuantity(parseInt(parseFloat(enteredNumber)));
+  }
+
+  function productMeasureInputHandler(item) {
+    setProductMeasure(item);
+  }
+
+  function productLocationHandler(location) {
+    setProductLocation(location);
   }
 
   function addProductHandler() {
-    props.onAdd(enteredProductText);
-    setEnteredProductText("");
+    props.onAdd({
+      name: productName,
+      quantity: productQuantity,
+      measure: productMeasure,
+      location: productLocation,
+    });
+
+    setProductName("");
+    setProductQuantity(1);
+    setProductMeasure(null);
+    setProductLocation("");
   }
 
   return (
@@ -19,9 +52,27 @@ function ProductInput(props) {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
-            placeholder="Add product..."
-            onChangeText={prodcutInputHandler}
-            value={enteredProductText}
+            placeholder="Product Name"
+            onChangeText={prodcutNameInputHandler}
+            value={productName}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Quantity"
+            onChangeText={prodcutQuantityInputHandler}
+            value={productQuantity.toString()}
+            keyboardType="numeric"
+          />
+          <Dropdown
+            data={units}
+            onSelect={productMeasureInputHandler}
+            value={productMeasure}
+          />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Location"
+            onChangeText={productLocationHandler}
+            value={productLocation}
           />
           <View style={styles.buttonContainer}>
             <Button title="Cancel" onPress={props.onCancel} />
@@ -37,7 +88,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
   textInput: {
     borderWidth: 1,
@@ -47,10 +97,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: "100%",
     padding: 16,
+    marginBottom: 8,
   },
   buttonContainer: {
     flexDirection: "row",
     marginTop: 16,
+    alignSelf: "center",
   },
 });
 

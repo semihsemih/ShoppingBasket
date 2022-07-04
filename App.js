@@ -8,8 +8,9 @@ export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [basket, setBasket] = useState([]);
 
-  function addProductHandler(enteredProductText) {
-    setBasket((currentBasket) => [...currentBasket, enteredProductText]);
+  function addProductHandler(enteredProduct) {
+    console.log(enteredProduct);
+    setBasket((currentBasket) => [...currentBasket, enteredProduct]);
     endAddProduct();
   }
 
@@ -23,7 +24,7 @@ export default function App() {
 
   return (
     <View style={styles.appContainer}>
-      <Button title="Add New Goal" onPress={startAddProduct} />
+      <Button title="Add New Product" onPress={startAddProduct} />
       <ProductInput
         visible={modalIsVisible}
         onAdd={addProductHandler}
@@ -33,7 +34,7 @@ export default function App() {
         <FlatList
           data={basket}
           renderItem={(itemData) => {
-            return <ProductItem text={itemData.item} />;
+            return <ProductItem text={itemData.item.name} />;
           }}
         />
       </View>
