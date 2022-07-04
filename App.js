@@ -6,10 +6,22 @@ import ProductItem from "./components/ProductItem";
 
 export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
-  const [basket, setBasket] = useState([]);
+  const [basket, setBasket] = useState([
+    {
+      name: "Salça",
+      quantity: 12,
+      measure: { id: 1, name: "kg" },
+      location: "Bim",
+    },
+    {
+      name: "Su",
+      quantity: 5,
+      measure: { id: 2, name: "liter" },
+      location: "A101",
+    },
+  ]);
 
   function addProductHandler(enteredProduct) {
-    console.log(enteredProduct);
     setBasket((currentBasket) => [...currentBasket, enteredProduct]);
     endAddProduct();
   }
@@ -34,7 +46,7 @@ export default function App() {
         <FlatList
           data={basket}
           renderItem={(itemData) => {
-            return <ProductItem text={itemData.item.name} />;
+            return <ProductItem item={itemData.item} />;
           }}
         />
       </View>
